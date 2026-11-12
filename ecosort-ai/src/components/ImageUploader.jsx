@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-export default function ImageUploader({ onImageSelect, preview, onClear }) {
+export default function ImageUploader({ onImageSelect, preview, onClear, fileName }) {
   const fileInputRef = useRef(null)
   const [dragActive, setDragActive] = useState(false)
 
@@ -40,32 +40,37 @@ export default function ImageUploader({ onImageSelect, preview, onClear }) {
   if (preview) {
     return (
       <div className="animate-fade-in-up">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200/60 dark:border-slate-700/50 overflow-hidden">
+          <div className="p-3">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 Image Preview
               </h3>
               <button
                 onClick={onClear}
-                className="text-xs font-medium text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 cursor-pointer"
+                className="text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Remove
               </button>
             </div>
-            <div className="rounded-xl overflow-hidden bg-gray-50">
+            <div className="rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900/50">
               <img
                 src={preview}
                 alt="Uploaded waste item"
-                className="w-full h-64 object-contain"
+                className="w-full h-56 object-contain"
               />
             </div>
+            {fileName && (
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1.5 truncate px-1">
+                {fileName}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -79,11 +84,11 @@ export default function ImageUploader({ onImageSelect, preview, onClear }) {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative bg-white rounded-2xl border-2 border-dashed p-10 text-center cursor-pointer
+        className={`relative bg-white dark:bg-slate-800 rounded-xl border-2 border-dashed p-8 text-center cursor-pointer
           transition-all duration-300 group
           ${dragActive
-            ? 'border-emerald-400 bg-emerald-50/50 shadow-lg shadow-emerald-100'
-            : 'border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/20 hover:shadow-md'
+            ? 'border-emerald-400 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 shadow-lg shadow-emerald-100 dark:shadow-emerald-900/20'
+            : 'border-slate-200 dark:border-slate-600 hover:border-emerald-300 dark:hover:border-emerald-600 hover:bg-emerald-50/20 dark:hover:bg-emerald-900/10 hover:shadow-md dark:hover:shadow-slate-900/50'
           }`}
       >
         <input
@@ -95,14 +100,14 @@ export default function ImageUploader({ onImageSelect, preview, onClear }) {
         />
 
         {/* Upload icon */}
-        <div className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center mb-5
+        <div className={`mx-auto w-14 h-14 rounded-xl flex items-center justify-center mb-4
           transition-all duration-300
           ${dragActive
-            ? 'bg-emerald-100 scale-110'
-            : 'bg-gray-100 group-hover:bg-emerald-100 group-hover:scale-105'
+            ? 'bg-emerald-100 dark:bg-emerald-800/40 scale-110'
+            : 'bg-slate-100 dark:bg-slate-700 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-800/40 group-hover:scale-105'
           }`}>
           <svg
-            className={`w-8 h-8 transition-colors duration-300 ${dragActive ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-500'}`}
+            className={`w-7 h-7 transition-colors duration-300 ${dragActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-500 dark:group-hover:text-emerald-400'}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -111,22 +116,22 @@ export default function ImageUploader({ onImageSelect, preview, onClear }) {
           </svg>
         </div>
 
-        <p className="text-base font-semibold text-gray-700 mb-1">
-          {dragActive ? 'Drop your image here' : 'Drag & drop your waste image'}
+        <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">
+          {dragActive ? 'Drop your image here' : 'Drop a waste image here'}
         </p>
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-xs text-slate-400 dark:text-slate-500 mb-3">
           or click to browse from your device
         </p>
 
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 text-sm font-medium rounded-lg">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 dark:bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700 dark:hover:bg-emerald-500 transition-colors">
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
-          Select Image
+          Browse Image
         </div>
 
-        <p className="mt-4 text-xs text-gray-300">
+        <p className="mt-3 text-[10px] text-slate-300 dark:text-slate-600">
           Supports JPG, PNG, WebP • Max 10MB
         </p>
       </div>
